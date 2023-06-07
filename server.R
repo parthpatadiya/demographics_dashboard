@@ -61,6 +61,7 @@ shinyServer(function(input,output,session){
   })
   
   summary_table_react<-reactive({
+    validate(need(nrow(demog_react())>0,'Data not available'))
     
     age_grp_tbl=demog_react() %>%tbl_cross(row =AGE_GROUP , col = StudyEnvSiteNumber, percent = "cell") %>%bold_labels()
     gender_tbl=demog_react() %>%tbl_cross(row =SEX , col = StudyEnvSiteNumber, percent = "cell") %>%bold_labels()
