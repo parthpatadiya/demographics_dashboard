@@ -6,7 +6,7 @@ library(tidyverse)
 library(gt)
 library(gtsummary)
 library(rintrojs)
-
+library(huxtable)
 
 rm(list = ls())
 source("data.R")
@@ -68,7 +68,7 @@ shinyServer(function(input,output,session){
     ethnic_tbl=demog_react() %>%tbl_cross(row =ETHNIC , col = StudyEnvSiteNumber, percent = "cell") %>%bold_labels()
     racial_tbl=demog_react() %>%tbl_cross(row =RACIAL_GROUP , col = StudyEnvSiteNumber, percent = "cell") %>%bold_labels()
     summary_table=tbl_stack(list(age_grp_tbl,gender_tbl,racial_tbl,ethnic_tbl))|>
-      modify_spanning_header(all_stat_cols() ~ "**Study Site Number**") %>% as_gt()
+      modify_spanning_header(all_stat_cols() ~ "**Study Site Number**") 
     
     return(summary_table)
   })
@@ -174,8 +174,31 @@ shinyServer(function(input,output,session){
   
   
   output$summary_table<- render_gt(
-    expr = summary_table_react(),width = "100%",height = "100%"
+    expr = summary_table_react()%>%as_gt(),width = "100%",height = "100%"
   )
   
+  save__summary_report <- reactive({
+    
+    outfile <- tempfile(fileext = ".rtf") 
+    tb_hux=as_hux_table(summary_table_react())
+    
+    huxtable::quick_rtf(
+      tb_hux,
+      file = outfile
+    )
+    
+    outfile
+    
+  })
+  
+  output$download_report <- downloadHandler(
+    filename = "summary_report.rtf",
+    
+    content = function(file) {
+      file.copy(save__summary_report(), file)
+      
+    }
+  )
+
   
 })

@@ -79,7 +79,7 @@ dbBody <-dashboardBody(
                         ),
                tabPanel("Summary Table",
                         column(width = 12,
-                               fluidRow( h2("Demographics Summary",class="box-title",align="center"), height = "75vh",width=12,gt_output(outputId = "summary_table")%>%withSpinner(color="#0dc5c1",hide.ui = FALSE,type = 6))%>%tagAppendAttributes(id = 'plot_box')
+                               fluidRow( div("Demographics Summary",downloadButton("download_report",class="download-report", "Download Summary Report"),class="box-title",align="center"), height = "75vh",width=12,gt_output(outputId = "summary_table")%>%withSpinner(color="#0dc5c1",hide.ui = FALSE,type = 6))%>%tagAppendAttributes(id = 'plot_box')
                         )
                         
                         )
@@ -89,9 +89,7 @@ dbBody <-dashboardBody(
              
            ),
 
-           #details_table
-           
-         # fluidRow( h2("Details",class="box-title",align="center"), height = "89vh",width=12,reactableOutput(outputId = "dem_details"))%>%tagAppendAttributes(id = 'plot_box')
+          
 )
 
 shinyUI( fluidPage(theme = shinytheme("cerulean"),dbHeader,dbBody,
@@ -137,7 +135,7 @@ shinyUI( fluidPage(theme = shinytheme("cerulean"),dbHeader,dbBody,
                                   font-size: xx-large;
     background-color: #5f9da0;
     color: white;
-    height: 37px;
+    height: 40px;
     margin-top: 5px;
     text-align: center;
     vertical-align: middle;
@@ -255,5 +253,10 @@ shinyUI( fluidPage(theme = shinytheme("cerulean"),dbHeader,dbBody,
                               {
                               text-align:center;
                               }
+                              
+                              .download-report{
+                              float: right;
+                              }
+                              
 ")))
                    
